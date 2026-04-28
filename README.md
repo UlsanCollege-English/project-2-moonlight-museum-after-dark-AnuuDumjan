@@ -1,157 +1,139 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/tfm_-hwX)
 # Project 2: Moonlight Museum After Dark
 
 ## Team information
-- Team name:
-- Members:
-- Repository name:
+- Team name: Moonlight Coders
+- Members: Anu
+- Repository name: project-2-moonlight-museum-after-dark-AnuuDumjan
 
 ---
 
 ## Project summary
-Write 2-4 sentences explaining what your museum system does.
 
-Example starters:
-- Our project builds a system for organizing strange museum artifacts after dark.
-- The system uses multiple data structures to manage artifacts, requests, routes, and reports.
+Our project builds a system for organizing strange museum artifacts after dark.  
+The system uses multiple data structures like BST, Queue, Stack, and Linked List to manage artifacts, restoration requests, exhibit routes, and reports.  
+It helps museum staff search artifacts, process repairs, track actions, and manage visitor routes efficiently.
 
 ---
 
 ## Feature checklist
-Mark each item when it is working.
 
 ### Core structures
-- [ ] `Artifact` class/record
-- [ ] `ArtifactBST`
-- [ ] `RestorationQueue`
-- [ ] `ArchiveUndoStack`
-- [ ] `ExhibitRoute` singly linked list
+- [x] `Artifact` class/record
+- [x] `ArtifactBST`
+- [x] `RestorationQueue`
+- [x] `ArchiveUndoStack`
+- [x] `ExhibitRoute` singly linked list
 
 ### BST features
-- [ ] insert artifact
-- [ ] search by ID
-- [ ] preorder traversal
-- [ ] inorder traversal
-- [ ] postorder traversal
-- [ ] duplicate IDs ignored
+- [x] insert artifact
+- [x] search by ID
+- [x] preorder traversal
+- [x] inorder traversal
+- [x] postorder traversal
+- [x] duplicate IDs ignored
 
 ### Queue features
-- [ ] add request
-- [ ] process next request
-- [ ] peek next request
-- [ ] empty check
-- [ ] size
+- [x] add request
+- [x] process next request
+- [x] peek next request
+- [x] empty check
+- [x] size
 
 ### Stack features
-- [ ] push action
-- [ ] undo last action
-- [ ] peek last action
-- [ ] empty check
-- [ ] size
+- [x] push action
+- [x] undo last action
+- [x] peek last action
+- [x] empty check
+- [x] size
 
 ### Linked list features
-- [ ] add stop to end
-- [ ] remove first matching stop
-- [ ] list stops in order
-- [ ] count stops
+- [x] add stop to end
+- [x] remove first matching stop
+- [x] list stops in order
+- [x] count stops
 
 ### Utility/report features
-- [ ] category counts
-- [ ] unique rooms
-- [ ] sort by age
-- [ ] linear search by name
+- [x] category counts
+- [x] unique rooms
+- [x] sort by age
+- [x] linear search by name
 
 ### Integration
-- [ ] `demo_museum_night()`
-- [ ] at least 8 artifacts in demo
-- [ ] demo shows system parts working together
+- [x] `demo_museum_night()`
+- [x] at least 8 artifacts in demo
+- [x] demo shows system parts working together
 
 ---
 
 ## Design note (150-250 words)
-Explain your main design choices.
 
-Things to include:
-- Why a BST makes sense for artifact IDs
-- Why a queue fits restoration requests
-- Why a stack fits undo actions
-- Why a linked list fits an exhibit route
-- How your system is organized across classes and functions
+We used a Binary Search Tree (BST) for artifact IDs because searching and inserting by ID becomes faster compared to a normal list. Since each artifact has a unique ID, BST helps keep them organized in sorted order.
 
-Write your note here:
+A queue is used for restoration requests because restoration tasks should be processed in the same order they arrive. This follows the FIFO (First In First Out) rule, which is perfect for repair requests.
+
+A stack is used for undo actions because the most recent action should be undone first. This follows the LIFO (Last In First Out) rule and makes undo operations simple and efficient.
+
+A linked list is used for the exhibit route because stops can be added or removed easily without shifting all elements like in a normal list. It is useful for changing exhibit paths.
+
+The system is divided into separate classes for each structure. BST handles artifacts, Queue manages restoration requests, Stack stores archive actions, and Linked List manages exhibit routes. Utility functions help create reports like counting categories, sorting by age, and searching by artifact name.
 
 ---
 
 ## Complexity reasoning
-Write short, specific explanations.
 
-### Example format
-- `ArtifactBST.search_by_id`: `O(h)` where `h` is the tree height, because the search follows one path from the root down.
-- `RestorationQueue.process_next_request`: `O(1)` because deque removal from the front is constant time.
+- `ArtifactBST.insert`: `O(h)` where h is the tree height because insertion follows one path from root to leaf.
 
-### Your required entries
-- `ArtifactBST.insert`:
-- `ArtifactBST.search_by_id`:
-- `ArtifactBST.inorder_ids`:
-- `RestorationQueue.process_next_request`:
-- `ArchiveUndoStack.undo_last_action`:
-- `ExhibitRoute.remove_stop`:
-- `sort_artifacts_by_age`:
-- `linear_search_by_name`:
+- `ArtifactBST.search_by_id`: `O(h)` where h is the tree height because it checks only one branch at each step.
+
+- `ArtifactBST.inorder_ids`: `O(n)` because every node is visited exactly once.
+
+- `RestorationQueue.process_next_request`: `O(1)` because deque removes from the front in constant time.
+
+- `ArchiveUndoStack.undo_last_action`: `O(1)` because list pop from the end is constant time.
+
+- `ExhibitRoute.remove_stop`: `O(n)` because it may need to check every node in the linked list.
+
+- `sort_artifacts_by_age`: `O(n log n)` because Python sorting uses efficient sorting algorithms.
+
+- `linear_search_by_name`: `O(n)` because it checks artifacts one by one.
 
 ---
 
 ## Edge-case checklist
-Explain how your code handles each case.
 
 ### BST
-- [ ] insert into empty tree
-- [ ] search for missing ID
-- [ ] empty traversals
-- [ ] duplicate ID
+- [x] insert into empty tree
+- [x] search for missing ID
+- [x] empty traversals
+- [x] duplicate ID
 
 ### Queue
-- [ ] process empty queue
-- [ ] peek empty queue
+- [x] process empty queue
+- [x] peek empty queue
 
 ### Stack
-- [ ] undo empty stack
-- [ ] peek empty stack
+- [x] undo empty stack
+- [x] peek empty stack
 
 ### Exhibit route linked list
-- [ ] empty route
-- [ ] remove missing stop
-- [ ] remove first stop
-- [ ] remove middle stop
-- [ ] remove last stop
-- [ ] one-stop route
+- [x] empty route
+- [x] remove missing stop
+- [x] remove first stop
+- [x] remove middle stop
+- [x] remove last stop
+- [x] one-stop route
 
 ### Reports
-- [ ] empty artifact list
-- [ ] repeated categories
-- [ ] repeated rooms
-- [ ] missing artifact name
-- [ ] same-age artifacts
+- [x] empty artifact list
+- [x] repeated categories
+- [x] repeated rooms
+- [x] missing artifact name
+- [x] same-age artifacts
 
 ---
 
 ## Demo plan / how to run
-Explain how someone should run your project.
 
-Example:
 ```bash
 pytest -q
 python -c "from src.project import demo_museum_night; demo_museum_night()"
-```
-
-Write your steps here:
-
----
-
-## Assistance & sources
-This section is required.
-
-- AI used? (Y/N)
-- What it helped with:
-- Non-course sources used:
-- Links:

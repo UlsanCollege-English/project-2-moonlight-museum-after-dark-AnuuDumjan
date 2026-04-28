@@ -51,28 +51,76 @@ class ArtifactBST:
         self.root: TreeNode | None = None
 
     def insert(self, artifact: Artifact) -> bool:
-        """Insert an artifact.
+        if self.root is None:
+            self.root = TreeNode(artifact)
+            return True
 
-        Return True if the artifact was inserted.
-        Return False if an artifact with the same ID already exists.
-        """
-        raise NotImplementedError
+        current = self.root
+
+        while True:
+            if artifact.artifact_id == current.artifact.artifact_id:
+                return False
+
+            elif artifact.artifact_id < current.artifact.artifact_id:
+                if current.left is None:
+                    current.left = TreeNode(artifact)
+                    return True
+                current = current.left
+
+            else:
+                if current.right is None:
+                    current.right = TreeNode(artifact)
+                    return True
+                current = current.right
 
     def search_by_id(self, artifact_id: int) -> Artifact | None:
-        """Return the matching artifact, or None if it does not exist."""
-        raise NotImplementedError
+        current = self.root
+
+        while current is not None:
+            if artifact_id == current.artifact.artifact_id:
+                return current.artifact
+            elif artifact_id < current.artifact.artifact_id:
+                current = current.left
+            else:
+                current = current.right
+
+        return None
 
     def inorder_ids(self) -> list[int]:
-        """Return a list of artifact IDs using inorder traversal."""
-        raise NotImplementedError
+        result = []
+
+        def traverse(node):
+            if node is not None:
+                traverse(node.left)
+                result.append(node.artifact.artifact_id)
+                traverse(node.right)
+
+        traverse(self.root)
+        return result
 
     def preorder_ids(self) -> list[int]:
-        """Return a list of artifact IDs using preorder traversal."""
-        raise NotImplementedError
+        result = []
+
+        def traverse(node):
+            if node is not None:
+                result.append(node.artifact.artifact_id)
+                traverse(node.left)
+                traverse(node.right)
+
+        traverse(self.root)
+        return result
 
     def postorder_ids(self) -> list[int]:
-        """Return a list of artifact IDs using postorder traversal."""
-        raise NotImplementedError
+        result = []
+
+        def traverse(node):
+            if node is not None:
+                traverse(node.left)
+                traverse(node.right)
+                result.append(node.artifact.artifact_id)
+
+        traverse(self.root)
+        return result
 
 
 class RestorationQueue:
@@ -82,24 +130,23 @@ class RestorationQueue:
         self._items: Deque[RestorationRequest] = deque()
 
     def add_request(self, request: RestorationRequest) -> None:
-        """Add a request to the back of the queue."""
-        raise NotImplementedError
+        self._items.append(request)
 
     def process_next_request(self) -> RestorationRequest | None:
-        """Remove and return the next request, or None if the queue is empty."""
-        raise NotImplementedError
+        if self._items:
+            return self._items.popleft()
+        return None
 
     def peek_next_request(self) -> RestorationRequest | None:
-        """Return the next request without removing it, or None if empty."""
-        raise NotImplementedError
+        if self._items:
+            return self._items[0]
+        return None
 
     def is_empty(self) -> bool:
-        """Return True if the queue has no requests."""
-        raise NotImplementedError
+        return len(self._items) == 0
 
     def size(self) -> int:
-        """Return the number of queued requests."""
-        raise NotImplementedError
+        return len(self._items)
 
 
 class ArchiveUndoStack:
@@ -109,24 +156,23 @@ class ArchiveUndoStack:
         self._items: list[str] = []
 
     def push_action(self, action: str) -> None:
-        """Push an action onto the stack."""
-        raise NotImplementedError
+        self._items.append(action)
 
     def undo_last_action(self) -> str | None:
-        """Remove and return the most recent action, or None if empty."""
-        raise NotImplementedError
+        if self._items:
+            return self._items.pop()
+        return None
 
     def peek_last_action(self) -> str | None:
-        """Return the most recent action without removing it, or None if empty."""
-        raise NotImplementedError
+        if self._items:
+            return self._items[-1]
+        return None
 
     def is_empty(self) -> bool:
-        """Return True if the stack has no actions."""
-        raise NotImplementedError
+        return len(self._items) == 0
 
     def size(self) -> int:
-        """Return the number of stored actions."""
-        raise NotImplementedError
+        return len(self._items)
 
 
 class ExhibitNode:
@@ -144,60 +190,127 @@ class ExhibitRoute:
         self.head: ExhibitNode | None = None
 
     def add_stop(self, stop_name: str) -> None:
-        """Add a stop to the end of the route."""
-        raise NotImplementedError
+        new_node = ExhibitNode(stop_name)
+
+        if self.head is None:
+            self.head = new_node
+            return
+
+        current = self.head
+        while current.next is not None:
+            current = current.next
+
+        current.next = new_node
 
     def remove_stop(self, stop_name: str) -> bool:
-        """Remove the first matching stop.
+        current = self.head
+        previous = None
 
-        Return True if a stop was removed.
-        Return False if the stop does not exist.
-        """
-        raise NotImplementedError
+        while current is not None:
+            if current.stop_name == stop_name:
+                if previous is None:
+                    self.head = current.next
+                else:
+                    previous.next = current.next
+                return True
+
+            previous = current
+            current = current.next
+
+        return False
 
     def list_stops(self) -> list[str]:
-        """Return the route as a list of stop names in order."""
-        raise NotImplementedError
+        result = []
+        current = self.head
+
+        while current is not None:
+            result.append(current.stop_name)
+            current = current.next
+
+        return result
 
     def count_stops(self) -> int:
-        """Return the number of stops in the route."""
-        raise NotImplementedError
+        count = 0
+        current = self.head
+
+        while current is not None:
+            count += 1
+            current = current.next
+
+        return count
 
 
 def count_artifacts_by_category(artifacts: list[Artifact]) -> dict[str, int]:
-    """Return a dictionary counting artifacts in each category."""
-    raise NotImplementedError
+    result = {}
 
+    for artifact in artifacts:
+        if artifact.category in result:
+            result[artifact.category] += 1
+        else:
+            result[artifact.category] = 1
+
+    return result
 
 
 def unique_rooms(artifacts: list[Artifact]) -> set[str]:
-    """Return a set of all rooms used by the given artifacts."""
-    raise NotImplementedError
+    rooms = set()
 
+    for artifact in artifacts:
+        rooms.add(artifact.room)
+
+    return rooms
 
 
 def sort_artifacts_by_age(
     artifacts: list[Artifact],
     descending: bool = False,
 ) -> list[Artifact]:
-    """Return a new list of artifacts sorted by age.
-
-    If descending is False, sort from youngest to oldest.
-    If descending is True, sort from oldest to youngest.
-    """
-    raise NotImplementedError
-
+    return sorted(artifacts, key=lambda x: x.age, reverse=descending)
 
 
 def linear_search_by_name(
     artifacts: list[Artifact],
     name: str,
 ) -> Artifact | None:
-    """Return the first artifact with an exact matching name, or None."""
-    raise NotImplementedError
+    for artifact in artifacts:
+        if artifact.name == name:
+            return artifact
 
+    return None
 
 
 def demo_museum_night() -> None:
-    """Run a small integration demo showing the system working together."""
-    raise NotImplementedError
+    print("Moonlight Museum After Dark")
+
+    bst = ArtifactBST()
+
+    artifacts = [
+        Artifact(10, "Mask", "History", 200, "Room A"),
+        Artifact(5, "Vase", "Ceramic", 150, "Room B"),
+        Artifact(15, "Sword", "Weapon", 300, "Room C"),
+        Artifact(3, "Coin", "Ancient", 500, "Room D"),
+        Artifact(7, "Statue", "Art", 250, "Room E"),
+        Artifact(12, "Painting", "Art", 100, "Room F"),
+        Artifact(18, "Helmet", "Armor", 350, "Room G"),
+        Artifact(20, "Shield", "Armor", 400, "Room H"),
+    ]
+
+    for artifact in artifacts:
+        bst.insert(artifact)
+
+    print("Inorder IDs:", bst.inorder_ids())
+
+    queue = RestorationQueue()
+    queue.add_request(RestorationRequest(10, "Fix cracks"))
+    print("Next restoration request:", queue.peek_next_request())
+
+    stack = ArchiveUndoStack()
+    stack.push_action("Added artifact")
+    print("Undo action:", stack.peek_last_action())
+
+    route = ExhibitRoute()
+    route.add_stop("Entrance Hall")
+    route.add_stop("Ancient Gallery")
+    print("Exhibit route:", route.list_stops())
+
+    print("Category counts:", count_artifacts_by_category(artifacts))
